@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -15,7 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode
+
 public class Actor {
 
 	@Id
@@ -37,4 +38,26 @@ public class Actor {
 			inverseJoinColumns = @JoinColumn(name = "movie_id")
 	)
 	Set<Movie> movies = new HashSet<>();
+
+	public void addMovie(Movie movie){
+		this.movies.add(movie);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		Actor actor = (Actor) o;
+		return yearOfBirth == actor.yearOfBirth && Objects.equals(id, actor.id) && Objects.equals(name, actor.name) &&
+				Objects.equals(lastName, actor.lastName);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, name, lastName, yearOfBirth);
+	}
 }

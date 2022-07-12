@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -12,8 +13,8 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
-@EqualsAndHashCode
+
+
 public class Movie {
 
 	@Id
@@ -29,4 +30,26 @@ public class Movie {
 
 	@ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.REMOVE},mappedBy = "movies")
 	Set<Actor> actors = new HashSet<>();
+
+	public void addActor(Actor actor){
+		this.actors.add(actor);
+		actor.addMovie(this);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		Movie movie = (Movie) o;
+		return yearOfRelease == movie.yearOfRelease && Objects.equals(id, movie.id) && Objects.equals(title, movie.title);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, title, yearOfRelease);
+	}
 }
