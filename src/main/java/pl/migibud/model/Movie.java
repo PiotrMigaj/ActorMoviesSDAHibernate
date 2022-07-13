@@ -13,13 +13,10 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
+@EqualsAndHashCode(exclude = "actors",callSuper = true)
+public class Movie extends BaseEntity{
 
-
-public class Movie {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	Long id;
 	String title;
 	int yearOfRelease;
 
@@ -28,28 +25,21 @@ public class Movie {
 		this.yearOfRelease = yearOfRelease;
 	}
 
-	@ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.REMOVE},mappedBy = "movies")
+	public Movie(String title, int yearOfRelease, Genre genre) {
+		this.title = title;
+		this.yearOfRelease = yearOfRelease;
+		this.genre = genre;
+	}
+
+	@ManyToMany(cascade = {CascadeType.PERSIST}, mappedBy = "movies")
 	Set<Actor> actors = new HashSet<>();
 
-	public void addActor(Actor actor){
+	@ManyToOne(cascade = {CascadeType.PERSIST})
+	@JoinColumn(name = "genre_id")
+	Genre genre;
+
+	public void addActor(Actor actor) {
 		this.actors.add(actor);
 		actor.addMovie(this);
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (o == null || getClass() != o.getClass()) {
-			return false;
-		}
-		Movie movie = (Movie) o;
-		return yearOfRelease == movie.yearOfRelease && Objects.equals(id, movie.id) && Objects.equals(title, movie.title);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id, title, yearOfRelease);
 	}
 }

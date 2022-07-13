@@ -1,9 +1,6 @@
 package pl.migibud.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -16,12 +13,9 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-
-public class Actor {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	Long id;
+@ToString
+@EqualsAndHashCode(exclude = "movies",callSuper = true)
+public class Actor extends BaseEntity{
 	String name, lastName;
 	int yearOfBirth;
 
@@ -32,6 +26,7 @@ public class Actor {
 	}
 
 	@ManyToMany
+	@ToString.Exclude
 	@JoinTable(
 			name = "actors_to_movies",
 			joinColumns = @JoinColumn(name = "actor_id"),
@@ -41,23 +36,5 @@ public class Actor {
 
 	public void addMovie(Movie movie){
 		this.movies.add(movie);
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (o == null || getClass() != o.getClass()) {
-			return false;
-		}
-		Actor actor = (Actor) o;
-		return yearOfBirth == actor.yearOfBirth && Objects.equals(id, actor.id) && Objects.equals(name, actor.name) &&
-				Objects.equals(lastName, actor.lastName);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id, name, lastName, yearOfBirth);
 	}
 }
