@@ -57,4 +57,18 @@ public class ActorRepo {
 		session.close();
 		return year;
 	}
+
+	public List<Actor> findAllWithLastNameEndsWith(String surnameEndsWith){
+		Session session = sessionFactory.openSession();
+		Transaction transaction = session.beginTransaction();
+
+		String hql = "SELECT a FROM Actor a WHERE a.lastName LIKE :lastName";
+		List<Actor> actors = session.createQuery(hql, Actor.class)
+				.setParameter("lastName", "%" + surnameEndsWith)
+				.getResultList();
+
+		transaction.commit();
+		session.close();
+		return actors;
+	}
 }

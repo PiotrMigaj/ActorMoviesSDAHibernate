@@ -22,6 +22,7 @@ public class Genre extends BaseEntity {
 	@ToString.Exclude
 	Set<Movie> movies = new HashSet<>();
 
+
 	public Genre(String name) {
 		this.name = name;
 	}

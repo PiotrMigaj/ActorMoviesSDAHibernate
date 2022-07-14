@@ -14,7 +14,6 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode(exclude = "actors",callSuper = true)
 public class Movie extends BaseEntity{
 
 	String title;
@@ -41,5 +40,24 @@ public class Movie extends BaseEntity{
 	public void addActor(Actor actor) {
 		this.actors.add(actor);
 		actor.addMovie(this);
+	}
+
+
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		Movie movie = (Movie) o;
+		return yearOfRelease == movie.yearOfRelease && Objects.equals(title, movie.title) && Objects.equals(genre, movie.genre);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(title, yearOfRelease, genre);
 	}
 }
