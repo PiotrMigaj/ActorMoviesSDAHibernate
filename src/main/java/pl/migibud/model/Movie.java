@@ -30,7 +30,7 @@ public class Movie extends BaseEntity{
 		this.genre = genre;
 	}
 
-	@ManyToMany(cascade = {CascadeType.PERSIST}, mappedBy = "movies")
+	@ManyToMany(cascade = {CascadeType.PERSIST}, mappedBy = "movies",fetch = FetchType.EAGER)
 	Set<Actor> actors = new HashSet<>();
 
 	@ManyToOne(cascade = {CascadeType.PERSIST})

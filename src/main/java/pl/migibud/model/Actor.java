@@ -25,7 +25,7 @@ public class Actor extends BaseEntity{
 		this.yearOfBirth = yearOfBirth;
 	}
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@ToString.Exclude
 	@JoinTable(
 			name = "actors_to_movies",

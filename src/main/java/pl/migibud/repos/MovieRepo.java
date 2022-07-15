@@ -82,4 +82,34 @@ public class MovieRepo {
 			session.close();
 		}
 	}
+
+	public List<Movie> findAll(){
+		Session session = sessionFactory.openSession();
+		Transaction transaction = session.beginTransaction();
+
+		List<Movie> movies = session.createQuery("FROM Movie", Movie.class)
+				.getResultList();
+
+		transaction.commit();
+		session.close();
+		return movies;
+	}
+
+	public Optional<Movie> findMovieByTitle(String title){
+		Session session = sessionFactory.openSession();
+		Transaction transaction = session.beginTransaction();
+
+		String hql = "SELECT m FROM Movie m WHERE m.title = :title";
+		List<Movie> movies = session.createQuery(hql, Movie.class)
+				.setParameter("title", title)
+				.getResultList();
+
+		Optional<Movie> firstMovie = movies.stream().findFirst();
+
+		transaction.commit();
+		session.close();
+		return firstMovie;
+	}
+
+
 }
